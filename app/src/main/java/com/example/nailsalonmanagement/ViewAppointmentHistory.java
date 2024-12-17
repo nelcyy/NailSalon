@@ -7,32 +7,41 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.ArrayList;
 
 public class ViewAppointmentHistory extends AppCompatActivity {
 
-    private TableLayout appointmentHistoryTable;
+    private TableLayout appointmentTable;
+    private static BST historyBST;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_appointment_history);
 
-        // Find the AppointmentHistoryTable
-        appointmentHistoryTable = findViewById(R.id.AppointmentTable);
+        // Find the AppointmentTable
+        appointmentTable = findViewById(R.id.AppointmentTable);
+
+        // Initialize the BST with the singleton instance
+        historyBST = BST.getInstance(); // Get the singleton instance of BST
+
+        // Display appointments from historyBST
+        displayAppointmentsFromHistory();
     }
 
-    private void displayHistoryAppointments(ArrayList<Appointment> historyAppointments) {
+    private void displayAppointmentsFromHistory() {
         // Clear the table before adding new rows but keep the header
-        appointmentHistoryTable.removeViews(1, appointmentHistoryTable.getChildCount() - 1);
+        appointmentTable.removeViews(1, appointmentTable.getChildCount() - 1);
 
-        // Add rows dynamically for each appointment in the history
-        for (Appointment appointment : historyAppointments) {
-            addHistoryAppointmentRow(appointment);
-        }
+        // Add rows dynamically for each appointment in the BST
+        historyBST.inOrderTraversal(new BST.AppointmentVisitor() {
+            @Override
+            public void visit(Appointment appointment) {
+                addAppointmentRow(appointment);
+            }
+        });
     }
 
-    private void addHistoryAppointmentRow(Appointment appointment) {
+    private void addAppointmentRow(Appointment appointment) {
         TableRow row = new TableRow(this);
 
         // Set layout parameters for the row
@@ -104,6 +113,6 @@ public class ViewAppointmentHistory extends AppCompatActivity {
         row.addView(time);
 
         // Add the row to the TableLayout
-        appointmentHistoryTable.addView(row);
+        appointmentTable.addView(row);
     }
 }

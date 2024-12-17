@@ -17,7 +17,7 @@ public class ViewAppointment extends AppCompatActivity {
 
     private TableLayout appointmentTable;
     private static ArrayList<Appointment> appointmentsArray; // Array for storing data
-    private static BST historyBST; // Replace the ArrayList with BST
+    private static BST historyBST; // Singleton BST for storing deleted appointments
     private static Stack<Appointment> undoStack, redoStack;
     private LinearLayout undoRedoLayout;  // Reference to the Undo/Redo buttons layout
     private Button undoButton, redoButton; // Undo and Redo buttons
@@ -32,7 +32,7 @@ public class ViewAppointment extends AppCompatActivity {
 
         // Initialize the list to track appointments
         appointmentsArray = new ArrayList<>();
-        historyBST = new BST(); // Initialize the BST
+        historyBST = BST.getInstance(); // Get the singleton BST instance
 
         undoStack = new Stack<>();
         redoStack = new Stack<>();
@@ -170,9 +170,20 @@ public class ViewAppointment extends AppCompatActivity {
         }
 
         if (appointmentToRemove != null) {
+            // Remove the appointment from the appointmentsArray
             appointmentsArray.remove(appointmentToRemove);
+
+            // Also remove from the static appointments list in MakeAppointment
+            ArrayList<Appointment> makeAppointmentList = MakeAppointment.getAppointments();
+            makeAppointmentList.remove(appointmentToRemove);
+
+            // Add the deleted appointment to the historyBST
             historyBST.insert(appointmentToRemove);
+
+            // Push the deleted appointment to the undo stack
             undoStack.push(appointmentToRemove);
+
+            // Refresh the table
             displayAppointments();
         }
     }
@@ -199,7 +210,7 @@ public class ViewAppointment extends AppCompatActivity {
                 // Push this appointment onto the redo stack in case we need to redo the deletion
                 redoStack.push(appointmentToUndo);
 
-                // Also remove it from historyBST if it was previously deleted
+                // Remove it from historyBST since it was restored
                 historyBST.delete(appointmentToUndo);
             }
         }
@@ -228,4 +239,3 @@ public class ViewAppointment extends AppCompatActivity {
         }
     }
 }
-
