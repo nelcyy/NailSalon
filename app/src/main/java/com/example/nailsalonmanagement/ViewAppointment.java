@@ -17,7 +17,7 @@ public class ViewAppointment extends AppCompatActivity {
 
     private TableLayout appointmentTable;
     private static ArrayList<Appointment> appointmentsArray; // Array for storing data
-    private static ArrayList<Appointment> historyAppointment; // Array for storing history of deleted appointments
+    private static BST historyBST; // Replace the ArrayList with BST
     private static Stack<Appointment> undoStack, redoStack;
     private LinearLayout undoRedoLayout;  // Reference to the Undo/Redo buttons layout
     private Button undoButton, redoButton; // Undo and Redo buttons
@@ -32,7 +32,7 @@ public class ViewAppointment extends AppCompatActivity {
 
         // Initialize the list to track appointments
         appointmentsArray = new ArrayList<>();
-        historyAppointment = new ArrayList<>();  // Initialize historyAppointment array
+        historyBST = new BST(); // Initialize the BST
 
         undoStack = new Stack<>();
         redoStack = new Stack<>();
@@ -53,11 +53,6 @@ public class ViewAppointment extends AppCompatActivity {
 
         // Display appointments directly from appointmentsArray
         displayAppointments();
-    }
-
-    // Method to get the static historyAppointment
-    public static ArrayList<Appointment> getHistoryAppointments() {
-        return historyAppointment;
     }
 
     private void displayAppointments() {
@@ -156,15 +151,14 @@ public class ViewAppointment extends AppCompatActivity {
     }
 
     private void deleteAppointmentFromRow(TableRow row) {
-        TextView nameView = (TextView) row.getChildAt(0); // Name column
-        TextView phoneView = (TextView) row.getChildAt(1); // Phone column
-        TextView dateView = (TextView) row.getChildAt(3); // Date column
+        TextView nameView = (TextView) row.getChildAt(0);
+        TextView phoneView = (TextView) row.getChildAt(1);
+        TextView dateView = (TextView) row.getChildAt(3);
 
         String name = nameView.getText().toString();
         String phone = phoneView.getText().toString();
         String date = dateView.getText().toString();
 
-        // Find the appointment in the appointmentsArray based on multiple criteria
         Appointment appointmentToRemove = null;
         for (Appointment appointment : appointmentsArray) {
             if (appointment.getName().equals(name) &&
@@ -176,27 +170,10 @@ public class ViewAppointment extends AppCompatActivity {
         }
 
         if (appointmentToRemove != null) {
-            // Remove from appointmentsArray
             appointmentsArray.remove(appointmentToRemove);
-
-            // Also remove from the source of appointments (MakeAppointment.getAppointments())
-            ArrayList<Appointment> appointments = MakeAppointment.getAppointments();
-            appointments.remove(appointmentToRemove);
-
-            // Add the deleted appointment to historyAppointment array (to keep track of deleted appointments)
-            historyAppointment.add(appointmentToRemove);
-
-            // Remove the row from TableLayout
-            appointmentTable.removeView(row);
-
-            // Refresh the table
-            displayAppointments();
-
-            // Push the deleted appointment onto the undo stack
+            historyBST.insert(appointmentToRemove);
             undoStack.push(appointmentToRemove);
-
-            // Enable Undo/Redo buttons visibility
-            undoRedoLayout.setVisibility(View.VISIBLE);
+            displayAppointments();
         }
     }
 
@@ -221,6 +198,9 @@ public class ViewAppointment extends AppCompatActivity {
 
                 // Push this appointment onto the redo stack in case we need to redo the deletion
                 redoStack.push(appointmentToUndo);
+
+                // Also remove it from historyBST if it was previously deleted
+                historyBST.delete(appointmentToUndo);
             }
         }
     }
@@ -230,7 +210,7 @@ public class ViewAppointment extends AppCompatActivity {
             // Get the last undone appointment from the redo stack
             Appointment appointmentToRedo = redoStack.pop();
 
-            // Remove it again from the appointmentsArray (redo the deletion)
+            // Remove it from the appointmentsArray (redo the deletion)
             appointmentsArray.remove(appointmentToRedo);
 
             // Also remove it from MakeAppointment.getAppointments()
@@ -242,6 +222,9 @@ public class ViewAppointment extends AppCompatActivity {
 
             // Push this appointment onto the undo stack in case we want to undo the redo
             undoStack.push(appointmentToRedo);
+
+            // Add it back to historyBST since it is being deleted again
+            historyBST.insert(appointmentToRedo);
         }
     }
 }

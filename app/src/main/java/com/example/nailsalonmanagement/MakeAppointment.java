@@ -214,7 +214,8 @@ public class MakeAppointment extends AppCompatActivity {
         if (manicureCheckBox.isChecked()) services.append("Manicure,");
 
         // Create a new Appointment object with all required details
-        Appointment newAppointment = new Appointment(name, phone, date, startTime, endTime, services.toString().trim());
+        int appointmentNumber = appointments.size() + 1; // Increment number
+        Appointment newAppointment = new Appointment(name, phone, services.toString().trim(), date, startTime, endTime, appointmentNumber);
 
         // Check for conflicts with existing appointments
         if (isTimeSlotAvailable(newAppointment)) {

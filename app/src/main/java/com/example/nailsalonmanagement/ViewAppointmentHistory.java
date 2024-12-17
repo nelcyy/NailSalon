@@ -20,12 +20,6 @@ public class ViewAppointmentHistory extends AppCompatActivity {
 
         // Find the AppointmentHistoryTable
         appointmentHistoryTable = findViewById(R.id.AppointmentTable);
-
-        // Retrieve the history appointments from the static historyAppointment array
-        ArrayList<Appointment> historyAppointments = ViewAppointment.getHistoryAppointments();
-
-        // Display the historical appointments
-        displayHistoryAppointments(historyAppointments);
     }
 
     private void displayHistoryAppointments(ArrayList<Appointment> historyAppointments) {
