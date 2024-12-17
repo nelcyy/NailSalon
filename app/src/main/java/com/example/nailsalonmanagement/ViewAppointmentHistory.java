@@ -3,14 +3,20 @@ package com.example.nailsalonmanagement;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ViewAppointmentHistory extends AppCompatActivity {
 
     private TableLayout appointmentTable;
+    private RadioGroup sortingRadioGroup;
+    private RadioButton newestRadio, dateRadio;
+
     private static BST historyBST;
 
     @Override
@@ -18,101 +24,87 @@ public class ViewAppointmentHistory extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_appointment_history);
 
-        // Find the AppointmentTable
+        // Initialize views
         appointmentTable = findViewById(R.id.AppointmentTable);
+        sortingRadioGroup = findViewById(R.id.radioGroup);
+        newestRadio = findViewById(R.id.NewestRadio);
+        dateRadio = findViewById(R.id.DateRadio);
 
-        // Initialize the BST with the singleton instance
-        historyBST = BST.getInstance(); // Get the singleton instance of BST
+        // Initialize BST
+        historyBST = BST.getInstance();
 
-        // Display appointments from historyBST
-        displayAppointmentsFromHistory();
-    }
+        // Display the default order (Newest)
+        displayNewestOrder();
 
-    private void displayAppointmentsFromHistory() {
-        // Clear the table before adding new rows but keep the header
-        appointmentTable.removeViews(1, appointmentTable.getChildCount() - 1);
-
-        // Add rows dynamically for each appointment in the BST
-        historyBST.inOrderTraversal(new BST.AppointmentVisitor() {
-            @Override
-            public void visit(Appointment appointment) {
-                addAppointmentRow(appointment);
+        // Set up radio button listener
+        sortingRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.NewestRadio) {
+                displayNewestOrder();
+            } else if (checkedId == R.id.DateRadio) {
+                displaySortedByDate();
             }
         });
     }
 
+    // Method to display appointments in added (newest) order
+    private void displayNewestOrder() {
+        clearTable();
+        for (Appointment appointment : historyBST.getAddedOrderList()) {
+            addAppointmentRow(appointment);
+        }
+    }
+
+    // Method to display appointments sorted by date (in-order traversal)
+    private void displaySortedByDate() {
+        clearTable();
+        historyBST.inOrderTraversal(appointment -> addAppointmentRow(appointment));
+    }
+
+    // Clears the table except for the header
+    private void clearTable() {
+        appointmentTable.removeViews(1, appointmentTable.getChildCount() - 1);
+    }
+
+    // Dynamically add rows to the table
     private void addAppointmentRow(Appointment appointment) {
         TableRow row = new TableRow(this);
 
-        // Set layout parameters for the row
+        // Row parameters
         TableRow.LayoutParams rowParams = new TableRow.LayoutParams(
-                TableRow.LayoutParams.MATCH_PARENT, // Match parent width
-                TableRow.LayoutParams.WRAP_CONTENT  // Wrap content height
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT
         );
         row.setLayoutParams(rowParams);
-        row.setBackgroundColor(Color.WHITE); // Set row background to white
+        row.setBackgroundColor(Color.WHITE);
 
-        // Common layout parameters for all TextViews
+        // Common layout parameters for TextViews
         TableRow.LayoutParams textParams = new TableRow.LayoutParams(
-                1, // Layout width set to 1dp for weight distribution
-                TableRow.LayoutParams.WRAP_CONTENT, // Wrap content for height
-                1 // Weight for equal column distribution
+                1, TableRow.LayoutParams.WRAP_CONTENT, 1
         );
 
-        // Create and configure Name TextView
-        TextView name = new TextView(this);
-        name.setLayoutParams(textParams);
-        name.setText(appointment.getName());
-        name.setGravity(Gravity.CENTER);
-        name.setPadding(10, 10, 10, 10);
-        name.setTextColor(Color.parseColor("#eb7e8a")); // Pink color
-        row.addView(name);
+        // Name
+        row.addView(createTextView(appointment.getName(), textParams));
+        // Phone
+        row.addView(createTextView(appointment.getPhone(), textParams));
+        // Services
+        row.addView(createTextView(appointment.getServices().replace(",", "\n"), textParams));
+        // Date
+        row.addView(createTextView(appointment.getDate(), textParams));
+        // Time
+        row.addView(createTextView(appointment.getStartTime() + " - " + appointment.getEndTime(), textParams));
 
-        // Create and configure Phone TextView
-        TextView phone = new TextView(this);
-        phone.setLayoutParams(textParams);
-        phone.setText(appointment.getPhone());
-        phone.setGravity(Gravity.CENTER);
-        phone.setPadding(10, 10, 10, 10);
-        phone.setTextColor(Color.parseColor("#eb7e8a"));
-        row.addView(phone);
-
-        // Create and configure Services TextView
-        TextView services = new TextView(this);
-        services.setLayoutParams(textParams);
-
-        // Combine services with line breaks
-        StringBuilder servicesText = new StringBuilder();
-        for (String service : appointment.getServices().split(",")) {
-            if (!service.isEmpty()) {
-                servicesText.append(service.trim()).append("\n");
-            }
-        }
-        services.setText(servicesText.toString().trim()); // Remove trailing newline
-        services.setGravity(Gravity.CENTER);
-        services.setPadding(10, 10, 10, 10);
-        services.setTextColor(Color.parseColor("#eb7e8a"));
-        row.addView(services);
-
-        // Create and configure Date TextView
-        TextView date = new TextView(this);
-        date.setLayoutParams(textParams);
-        date.setText(appointment.getDate());
-        date.setGravity(Gravity.CENTER);
-        date.setPadding(10, 10, 10, 10);
-        date.setTextColor(Color.parseColor("#eb7e8a"));
-        row.addView(date);
-
-        // Create and configure Time TextView
-        TextView time = new TextView(this);
-        time.setLayoutParams(textParams);
-        time.setText(appointment.getStartTime() + " - " + appointment.getEndTime());
-        time.setGravity(Gravity.CENTER);
-        time.setPadding(10, 10, 10, 10);
-        time.setTextColor(Color.parseColor("#eb7e8a"));
-        row.addView(time);
-
-        // Add the row to the TableLayout
+        // Add row to table
         appointmentTable.addView(row);
+    }
+
+    // Helper method to create TextView
+    private TextView createTextView(String text, TableRow.LayoutParams params) {
+        TextView textView = new TextView(this);
+        textView.setLayoutParams(params);
+        textView.setText(text);
+        textView.setGravity(Gravity.CENTER);
+        textView.setPadding(10, 10, 10, 10);
+        textView.setTextColor(Color.parseColor("#eb7e8a"));
+        return textView;
     }
 }

@@ -32,6 +32,11 @@ public class BST {
         return instance;
     }
 
+    // Getter for addedOrderList
+    public ArrayList<Appointment> getAddedOrderList() {
+        return addedOrderList;
+    }
+
     // Interface for the visitor
     public interface AppointmentVisitor {
         void visit(Appointment appointment);
@@ -113,25 +118,6 @@ public class BST {
             inOrderTraversalRec(node.left, visitor);  // Traverse left
             visitor.visit(node.data);  // Visit current node
             inOrderTraversalRec(node.right, visitor);  // Traverse right
-        }
-    }
-
-    // Display appointments sorted by date (old method, now using inOrderTraversal)
-    public void displayInOrder() {
-        System.out.println("Appointments Sorted by Date:");
-        inOrderTraversal(new AppointmentVisitor() {
-            @Override
-            public void visit(Appointment appointment) {
-                System.out.println(appointment);
-            }
-        });
-    }
-
-    // Display appointments in added order
-    public void displayAddedOrder() {
-        System.out.println("Appointments in Added Order:");
-        for (Appointment appointment : addedOrderList) {
-            System.out.println(appointment);
         }
     }
 }
