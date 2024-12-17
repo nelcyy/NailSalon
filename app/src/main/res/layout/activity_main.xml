@@ -10,15 +10,15 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutContainer"
-        android:layout_width="435dp"
-        android:layout_height="1060dp"
+        android:layout_width="431dp"
+        android:layout_height="1086dp"
         android:layout_marginTop="190dp"
         android:background="@drawable/bakground_salon"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"> <!-- Background added here -->
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textView"
@@ -27,7 +27,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="Nails Salon"
-            android:textColor="@color/black"
+            android:textColor="@color/fanta"
             android:textSize="50dp"
             android:textStyle="bold" />
 
