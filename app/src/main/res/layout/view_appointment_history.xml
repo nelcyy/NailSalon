@@ -27,12 +27,14 @@
         <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_gravity="center">
 
             <RadioButton
                 android:id="@+id/NewestRadio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="Newest" />
 
             <RadioButton

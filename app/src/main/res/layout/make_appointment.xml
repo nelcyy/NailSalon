@@ -10,118 +10,120 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
             android:text="Make Appointment"
-            android:textStyle="bold"
             android:textColor="@color/pink"
             android:textSize="40dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"/>
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/Name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="Name"
-            android:textSize="25dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="20dp"
-            android:layout_marginHorizontal="10dp"/>
+            android:ems="10"
+            android:hint="Name"
+            android:inputType="text"
+            android:textSize="25dp" />
 
         <EditText
             android:id="@+id/NoHandphone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="phone"
-            android:hint="No. Handphone"
-            android:textSize="25dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="20dp"
-            android:layout_marginHorizontal="10dp"/>
+            android:ems="10"
+            android:hint="No. Handphone"
+            android:inputType="phone"
+            android:textSize="25dp" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Service Type:"
-            android:textSize="25dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="10dp"/>
+            android:text="Service Type:"
+            android:textSize="25dp" />
 
         <CheckBox
             android:id="@+id/NailArt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:text="Nail Art"
-            android:textSize="15dp"
-            android:layout_marginLeft="10dp"/>
+            android:textSize="15dp" />
 
         <CheckBox
             android:id="@+id/Pedicure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:text="Pedicure"
-            android:textSize="15dp"
-            android:layout_marginLeft="10dp"/>
+            android:textSize="15dp" />
 
         <CheckBox
             android:id="@+id/Manicure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:text="Manicure"
-            android:textSize="15dp"
-            android:layout_marginLeft="10dp"/>
+            android:textSize="15dp" />
 
         <EditText
             android:id="@+id/Date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="date"
-            android:hint="Date"
-            android:textSize="25dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="20dp"
-            android:layout_marginHorizontal="10dp"/>
+            android:ems="10"
+            android:hint="Date"
+            android:inputType="date"
+            android:textSize="25dp" />
 
         <EditText
             android:id="@+id/StartTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="time"
-            android:hint="Start Time"
-            android:textSize="25dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="20dp"
-            android:layout_marginHorizontal="10dp"/>
+            android:ems="10"
+            android:hint="Start Time"
+            android:inputType="time"
+            android:textSize="25dp" />
 
         <EditText
             android:id="@+id/EndTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="time"
-            android:hint="End Time (automatically)"
-            android:focusable="false"
-            android:textSize="25dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="20dp"
-            android:layout_marginHorizontal="10dp"/>
+            android:ems="10"
+            android:focusable="false"
+            android:hint="End Time (automatically)"
+            android:inputType="time"
+            android:textSize="25dp" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Make Appointment"
-            android:backgroundTint="@color/pink"
-            android:textColor="@color/white"
+            android:layout_gravity="center"
             android:background="@drawable/rounded_button"
-            android:layout_gravity="center"/>
+            android:backgroundTint="@color/pink"
+            android:text="Make Appointment"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
