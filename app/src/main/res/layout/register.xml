@@ -8,7 +8,6 @@
     tools:context=".Regist"
     tools:ignore="MissingClass">
 
-
     <TextView
         android:id="@+id/titleemail"
         android:layout_width="wrap_content"
