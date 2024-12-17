@@ -8,14 +8,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
 
 public class Login extends AppCompatActivity {
 
     private EditText emailEditText, passwordEditText;
     private Button loginButton;
-    private TextView signUpTextView;
+    private TextView signUpTextView; // Declare the TextView
     private static ArrayList<Regist.User> userList = Regist.userList; // Referencing the same user list
 
     @Override
@@ -26,7 +25,12 @@ public class Login extends AppCompatActivity {
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
         loginButton = findViewById(R.id.login_button);
-        signUpTextView = findViewById(R.id.sign_up_text);
+        signUpTextView = findViewById(R.id.sign_up_text); // Initialize the sign-up TextView
+
+        // Set onClickListener for "Don't have an account? Sign Up"
+        signUpTextView.setOnClickListener(v -> {
+            startActivity(new Intent(Login.this, Regist.class)); // Redirect to Sign Up
+        });
 
         loginButton.setOnClickListener(v -> {
             String email = emailEditText.getText().toString();
@@ -48,10 +52,5 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(this, "Invalid email or password!", Toast.LENGTH_SHORT).show();
             }
         });
-
-        signUpTextView.setOnClickListener(v -> {
-            startActivity(new Intent(Login.this, Regist.class)); // Navigate to Registration
-        });
     }
 }
-

@@ -14,6 +14,7 @@ public class Regist extends AppCompatActivity {
 
     private EditText emailEditText, passwordEditText, confirmPasswordEditText;
     private Button signUpButton;
+    private TextView loginTextView; // Declare the TextView
     static ArrayList<User> userList = new ArrayList<>(); // Local storage for users
 
     @Override
@@ -25,6 +26,12 @@ public class Regist extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password);
         confirmPasswordEditText = findViewById(R.id.confirmpass);
         signUpButton = findViewById(R.id.sign_up_button);
+        loginTextView = findViewById(R.id.loginText); // Initialize the login TextView
+
+        // Set onClickListener for "Already have an account? LOGIN"
+        loginTextView.setOnClickListener(v -> {
+            startActivity(new Intent(Regist.this, Login.class)); // Redirect to Login
+        });
 
         signUpButton.setOnClickListener(v -> {
             String email = emailEditText.getText().toString();
@@ -50,4 +57,3 @@ public class Regist extends AppCompatActivity {
         }
     }
 }
-
